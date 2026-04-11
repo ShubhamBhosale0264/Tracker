@@ -1511,12 +1511,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 function seed(){
   const td=ds(t0());
   events=[
-    {id:uid(),title:'Morning Run',start:'07:00',end:'08:00',repeat:'weekdays',date:td,notes:'Riverside track — 5km',color:CATS[2].c,customDays:[]},
-    {id:uid(),title:'Team Standup',start:'09:30',end:'10:00',repeat:'weekly',date:td,notes:'Zoom link in calendar',color:CATS[0].c,customDays:[]},
-    {id:uid(),title:'Deep Work',start:'10:00',end:'12:00',repeat:'daily',date:td,notes:'Focus mode, no notifications',color:CATS[1].c,customDays:[]},
-    {id:uid(),title:'Lunch Break',start:'13:00',end:'14:00',repeat:'daily',date:td,color:CATS[4].c,notes:'',customDays:[]},
-    {id:uid(),title:'Gym',start:'18:00',end:'19:30',repeat:'custom',date:td,color:CATS[2].c,notes:'Weights + 20min cardio',customDays:[1,3,5]},
-    {id:uid(),title:'Reading',start:'21:00',end:'22:00',repeat:'daily',date:td,color:CATS[7].c,notes:'',customDays:[]},
+    {id:uid(),title:'Wake Up And Get Ready',start:'06:00',end:'07:15',repeat:'weekdays',date:td,notes:'Wake Up , Workout,Get Ready',color:CATS[2].c,customDays:[]},
+    {id:uid(),title:'Work Start',start:'09:30',end:'17:30',repeat:'weekdays',date:td,notes:'Complete Assigned Work',color:CATS[0].c,customDays:[]},
+    {id:uid(),title:'Deep Work[Self Study]',start:'21:15',end:'22.30',repeat:'weekdays',date:td,notes:'Focus mode, no notifications',color:CATS[1].c,customDays:[]},
+    {id:uid(),title:'Music/Podcast',start:'08:00',end:'09:30',repeat:'weekdays',date:td,color:CATS[4].c,notes:'',customDays:[]},
+    {id:uid(),title:'Entertainment',start:'17:30',end:'19:30',repeat:'weekdays',date:td,color:CATS[2].c,notes:'Weights + 20min cardio',customDays:[1,3,5]},
+    {id:uid(),title:'Reading',start:'22:30',end:'22:45',repeat:'daily',date:td,color:CATS[7].c,notes:'',customDays:[]},
   ];
   save();render();
 }
