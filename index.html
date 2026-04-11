@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Planr — Smart Timetable</title>
 <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1836/1836327.png" />
-        href="https://www.flaticon.com/free-icon/calendar_1582043?related_id=1581943&origin=search" />
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -413,12 +412,11 @@ body{background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:14
    MOBILE BOTTOM NAV
 ════════════════════════════════ */
 .bottom-nav{
-  display:none;
   position:fixed;bottom:0;left:0;right:0;height:var(--bnav);z-index:150;
   background:var(--white);border-top:1px solid var(--border);
-  display:grid;grid-template-columns:repeat(4,1fr);
+  display:none;grid-template-columns:repeat(4,1fr);
 }
-@media(min-width:640px){.bottom-nav{display:none!important}}
+@media(max-width:639px){.bottom-nav{display:grid}}
 .bnav-btn{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;border:none;background:transparent;cursor:pointer;
@@ -1000,8 +998,9 @@ function isMobile(){return window.innerWidth<640}
 
 // ── Storage ──
 function save(){try{localStorage.setItem('planr4',JSON.stringify(events))}catch(e){}}
-function load(){try{const r=localStorage.getItem('planr4');if(r)events=JSON.parse(r)}catch(e){events=[]}}
-
+function load(){
+  try{const d=localStorage.getItem('planr4');if(d)events=JSON.parse(d)}catch(e){events=[];}
+}
 // ── Occurrence ──
 function occurs(ev,d){
   const dow=d.getDay(),dstr=ds(d);
@@ -1505,7 +1504,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   render();
   setInterval(()=>{if(sd(cursor,t0()))render()},60000);
-  if(!events.length)seed();
+  // if(!events.length)seed();
 });
 
 function seed(){
@@ -1513,7 +1512,7 @@ function seed(){
   events=[
     {id:uid(),title:'Wake Up And Get Ready',start:'06:00',end:'07:15',repeat:'weekdays',date:td,notes:'Wake Up , Workout,Get Ready',color:CATS[2].c,customDays:[]},
     {id:uid(),title:'Work Start',start:'09:30',end:'17:30',repeat:'weekdays',date:td,notes:'Complete Assigned Work',color:CATS[0].c,customDays:[]},
-    {id:uid(),title:'Deep Work[Self Study]',start:'21:15',end:'22.30',repeat:'weekdays',date:td,notes:'Focus mode, no notifications',color:CATS[1].c,customDays:[]},
+    {id:uid(),title:'Deep Work[Self Study]',start:'21:15',end:'22:30',repeat:'weekdays',date:td,notes:'Focus mode, no notifications',color:CATS[1].c,customDays:[]},
     {id:uid(),title:'Music/Podcast',start:'08:00',end:'09:30',repeat:'weekdays',date:td,color:CATS[4].c,notes:'',customDays:[]},
     {id:uid(),title:'Entertainment',start:'17:30',end:'19:30',repeat:'weekdays',date:td,color:CATS[2].c,notes:'Weights + 20min cardio',customDays:[1,3,5]},
     {id:uid(),title:'Reading',start:'22:30',end:'22:45',repeat:'daily',date:td,color:CATS[7].c,notes:'',customDays:[]},
