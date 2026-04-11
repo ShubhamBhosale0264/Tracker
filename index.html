@@ -416,50 +416,166 @@ textarea.fi { resize: vertical; min-height: 70px; font-size: 13px; }
 .toast.ok .ti { color: #4ade80; }
 .toast.err .ti { color: #f87171; }
 
-/* ── MOBILE ── */
+/* ══════════════════════════════════════
+   RESPONSIVE — mobile-first
+   xs  : < 480px   (small phones)
+   sm  : 480–767px (large phones / phablets)
+   md  : 768–1023px (tablets)
+   lg  : 1024px+   (desktop)
+══════════════════════════════════════ */
+
+/* ── MOBILE BOTTOM NAV ── */
 .mob-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
   background: var(--surface); border-top: 1px solid var(--border);
-  display: none; grid-template-columns: repeat(4, 1fr); height: 58px;
-}
-@media (max-width: 767px) {
-  .mob-nav { display: grid; }
-  .content { padding: 12px 14px; padding-bottom: 72px; }
-  .topbar { padding: 0 16px; height: 54px; }
-  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 300; }
-  .sidebar.open { transform: none; }
-  .sb-back { display: block !important; }
-  .view-strip { display: none; }
-  .date-h { font-size: 1rem; max-width: 160px; }
-  .btn-today, .btn-secondary { display: none; }
-  .btn-primary { padding: 7px 10px; }
-  .btn-primary span { display: none; }
-}
-@media (min-width: 768px) { .view-strip { display: flex; } }
-@media (min-width: 1024px) { .topbar .ham { display: none !important; } }
-
-.sb-back {
-  display: none; position: fixed; inset: 0; z-index: 290;
-  background: rgba(28,25,23,.45); backdrop-filter: blur(4px);
+  display: none; grid-template-columns: repeat(4, 1fr);
+  height: 58px; padding-bottom: env(safe-area-inset-bottom);
 }
 .mob-nav-btn {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 3px; border: none; background: none; cursor: pointer;
   color: var(--ink3); transition: color .13s; padding: 6px 0; font-family: var(--font);
 }
-.mob-nav-btn i { font-size: 19px; }
+.mob-nav-btn i { font-size: 20px; }
 .mob-nav-btn span { font-size: 9px; font-weight: 600; letter-spacing: .04em; }
 .mob-nav-btn.on { color: var(--accent); }
 .mob-fab {
   background: var(--accent); color: #fff; border: none; border-radius: 50%;
-  width: 46px; height: 46px; cursor: pointer; margin-top: -14px;
-  display: flex; align-items: center; justify-content: center; font-size: 20px;
-  box-shadow: 0 4px 14px rgba(229,77,46,.4); transition: all .17s; align-self: center; justify-self: center;
+  width: 48px; height: 48px; cursor: pointer; margin-top: -16px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  box-shadow: 0 4px 16px rgba(229,77,46,.4); transition: all .17s;
+  align-self: center; justify-self: center; flex-shrink: 0;
 }
 .mob-fab:active { transform: scale(.92); }
 
-/* ── SIDEBAR SLIM (desktop collapse) ── */
+/* ── SIDEBAR BACKDROP ── */
+.sb-back {
+  display: none; position: fixed; inset: 0; z-index: 290;
+  background: rgba(28,25,23,.5); backdrop-filter: blur(6px);
+}
+
+/* ── MOBILE (< 768px) ── */
+@media (max-width: 767px) {
+  /* Show bottom nav */
+  .mob-nav { display: grid; }
+
+  /* Sidebar slides in from left */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    transform: translateX(-100%); z-index: 300;
+    width: 280px !important;
+    transition: transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow: var(--shadow-lg);
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  /* Topbar */
+  .topbar { padding: 0 14px; height: 52px; gap: 8px; }
+  .btn-today { display: none; }
+  .btn-secondary { display: none; }
+  .btn-primary span { display: none; }
+  .btn-primary { padding: 8px 10px; }
+  .icon-btn[title="Import JSON"] { display: none; }
+  .date-h { font-size: .95rem; max-width: 150px; }
+  .date-s { display: none; }
+
+  /* Hide desktop view strip — use bottom nav instead */
+  .view-strip { display: none !important; }
+
+  /* Content area leaves room for bottom nav */
+  .content {
+    padding: 10px 10px;
+    padding-bottom: calc(58px + env(safe-area-inset-bottom) + 8px);
+  }
+
+  /* Day view — narrower time col */
+  .day-time { width: 44px; }
+  .tl { font-size: 8px; padding: 5px 6px 0; height: 56px; }
+  .dhr { height: 56px; }
+  .ev-block { left: 4px; right: 4px; padding: 4px 7px; font-size: 11px; border-radius: 7px; }
+  .ev-block .ev-time { display: none; }
+
+  /* Week view — compact */
+  .wk-head { grid-template-columns: 36px repeat(7,1fr) !important; }
+  .wk-grid { grid-template-columns: 36px repeat(7,1fr) !important; }
+  .wk-hdcell { padding: 6px 2px; font-size: 8px; }
+  .wk-num { font-size: .8rem !important; }
+  .wk-hdcell.is-today .wk-num { width: 22px !important; height: 22px !important; font-size: .75rem !important; }
+  .wk-tl { font-size: 7px; padding: 4px 4px 0; height: 44px; }
+  .wk-cell { height: 44px; }
+  .wk-ev { font-size: 8px; padding: 1px 3px; left: 1px; right: 1px; }
+
+  /* Month view — compact cells */
+  .m-cell { min-height: 56px; padding: 4px 3px 2px; }
+  .m-num { width: 20px; height: 20px; font-size: 10px; margin-bottom: 2px; }
+  .m-dlbl { font-size: 8px; padding: 6px 2px; }
+  .m-pill { font-size: 8px; padding: 1px 3px; border-radius: 3px; }
+  .m-more { font-size: 8px; }
+
+  /* Modal full-screen bottom sheet */
+  .modal { border-radius: 20px 20px 0 0; }
+  .modal-body { padding: 12px 16px; }
+  .modal-head { padding: 14px 16px 0; }
+  .modal-foot { padding: 10px 16px calc(16px + env(safe-area-inset-bottom)); }
+
+  /* Toast above bottom nav */
+  .toast-stack { bottom: calc(58px + env(safe-area-inset-bottom) + 10px); left: 12px; right: 12px; }
+
+  /* Alert banner full width */
+  .alert-banner { padding: 8px 10px 0; }
+  .alert-card { border-radius: 12px; padding: 12px 14px; }
+
+  /* Popover full bottom sheet */
+  .pop-card { border-radius: 20px 20px 0 0; }
+}
+
+/* ── SMALL PHONE (< 400px) ── */
+@media (max-width: 400px) {
+  .wk-hdcell { font-size: 7px; }
+  .wk-num { font-size: .7rem !important; }
+  .m-cell { min-height: 48px; }
+  .frow { grid-template-columns: 1fr; }
+  .timing-chips { gap: 4px; }
+  .t-chip { padding: 5px 9px; font-size: 11px; }
+}
+
+/* ── TABLET (768px – 1023px) ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Slim sidebar on tablet */
+  .sidebar { width: 68px; flex-shrink: 0; }
+  .sidebar .sb-btn span,
+  .sidebar .mini-cal,
+  .sidebar .cat-name,
+  .sidebar .cat-count,
+  .sidebar .sb-label,
+  .sidebar .logo-name,
+  .sidebar .btn-add-sb span { display: none; }
+  .sidebar .sb-btn { justify-content: center; padding: 10px 0; }
+  .sidebar .sb-btn i { width: auto; margin: 0; }
+  .sidebar .cat-item { justify-content: center; padding: 7px 0; }
+  .sidebar .logo-row { justify-content: center; }
+  .sidebar .btn-add-sb { border-radius: 50%; width: 40px; height: 40px; padding: 0; justify-content: center; }
+  .sidebar .sb-bottom { padding: 12px; display: flex; justify-content: center; }
+
+  /* View strip visible on tablet */
+  .view-strip { display: flex; }
+
+  /* Topbar */
+  .topbar { padding: 0 18px; }
+  .btn-secondary span { display: none; }
+  .btn-secondary { padding: 7px 10px; }
+
+  /* Content */
+  .content { padding: 14px 16px; }
+
+  /* Month cells */
+  .m-cell { min-height: 80px; }
+}
+
+/* ── DESKTOP (1024px+) ── */
 @media (min-width: 1024px) {
+  /* Hamburger toggles slim mode */
+  .sidebar { transition: width .24s cubic-bezier(.4,0,.2,1); overflow: hidden; }
   .sidebar.slim { width: 68px; }
   .sidebar.slim .sb-btn span,
   .sidebar.slim .mc-title-wrap,
@@ -475,7 +591,10 @@ textarea.fi { resize: vertical; min-height: 70px; font-size: 13px; }
   .sidebar.slim .logo-row { justify-content: center; }
   .sidebar.slim .btn-add-sb { border-radius: 50%; width: 40px; height: 40px; padding: 0; }
   .sidebar.slim .sb-bottom { padding: 12px; display: flex; justify-content: center; }
-  .sidebar { transition: width .24s cubic-bezier(.4,0,.2,1); overflow: hidden; }
+
+  /* Month cells taller on desktop */
+  .m-cell { min-height: 110px; }
+  .m-pill { font-size: 11px; }
 }
 
 /* ── REMINDER TOGGLE ── */
@@ -851,11 +970,24 @@ function toast(msg, type='ok') {
 }
 
 // Sidebar
-function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sbBack').style.display = 'block'; }
-function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbBack').style.display = 'none'; }
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sbBack').style.display = 'block';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbBack').style.display = 'none';
+}
 function handleHam() {
-  if (isMob()) { openSidebar(); return; }
-  document.getElementById('sidebar').classList.toggle('slim');
+  if (window.innerWidth < 768) {
+    // mobile — slide sidebar in/out
+    const sb = document.getElementById('sidebar');
+    if (sb.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  } else {
+    // tablet/desktop — toggle slim mode
+    document.getElementById('sidebar').classList.toggle('slim');
+  }
 }
 
 // Popover
@@ -929,7 +1061,9 @@ function render() {
 function renderDay() {
   const tCol = document.getElementById('dayTime'), eCol = document.getElementById('dayEv');
   tCol.innerHTML = ''; eCol.innerHTML = '';
-  const PX = 64;
+  const PX = isMob() ? 56 : 64;
+  const TCW = isMob() ? 44 : 58;
+  tCol.style.width = TCW + 'px';
   const dayEvs = evFor(cursor);
   for (let h = 0; h < 24; h++) {
     const lbl = document.createElement('div'); lbl.className = 'tl'; lbl.style.height = PX+'px';
@@ -968,15 +1102,18 @@ function renderWeek() {
   const head = document.getElementById('wkHead'), grid = document.getElementById('wkGrid');
   head.innerHTML = ''; grid.innerHTML = '';
   const ws = weekStart(cursor), td = today0();
-  const PX = 52;
-  head.style.gridTemplateColumns = '58px repeat(7,1fr)';
-  grid.style.gridTemplateColumns = '58px repeat(7,1fr)';
+  const mob = isMob();
+  const PX = mob ? 44 : 52;
+  const TCW = mob ? 36 : 58;
+  const cols = `${TCW}px repeat(7,1fr)`;
+  head.style.gridTemplateColumns = cols;
+  grid.style.gridTemplateColumns = cols;
   const c0 = document.createElement('div'); c0.className = 'wk-hd0'; head.appendChild(c0);
   for (let d = 0; d < 7; d++) {
     const day = addDays(ws, d), isT = sameDay(day, td);
     const cell = document.createElement('div'); cell.className = 'wk-hdcell' + (isT ? ' is-today' : '');
     const num = document.createElement('span'); num.className = 'wk-num'; num.textContent = day.getDate();
-    cell.textContent = DS[day.getDay()].slice(0,3);
+    cell.textContent = mob ? DS[day.getDay()][0] : DS[day.getDay()].slice(0,3);
     cell.appendChild(num); head.appendChild(cell);
   }
   for (let h = 0; h < 24; h++) {
@@ -1033,15 +1170,30 @@ function renderMonth() {
     cell.className = 'm-cell' + (out?' outside':'') + (isT?' is-today':'');
     const num = document.createElement('div'); num.className = 'm-num'; num.textContent = d.getDate(); cell.appendChild(num);
     const all = evFor(d);
-    all.slice(0,3).forEach(ev => {
-      const cat = catOf(ev.color);
-      const pill = document.createElement('span'); pill.className = 'm-pill';
-      pill.style.cssText = `background:${cat.bg};color:${cat.c}`;
-      pill.textContent = ev.title;
-      pill.addEventListener('click', e => { e.stopPropagation(); showPop(ev); });
-      cell.appendChild(pill);
-    });
-    if (all.length > 3) { const more = document.createElement('div'); more.className = 'm-more'; more.textContent = `+${all.length-3} more`; cell.appendChild(more); }
+    const mob = isMob();
+    if (mob) {
+      // dot indicators on mobile
+      if (all.length) {
+        const dotRow = document.createElement('div');
+        dotRow.style.cssText = 'display:flex;gap:2px;flex-wrap:wrap;padding:0 2px';
+        all.slice(0,4).forEach(ev => {
+          const dot = document.createElement('span');
+          dot.style.cssText = `width:5px;height:5px;border-radius:50%;background:${ev.color};flex-shrink:0;display:inline-block`;
+          dotRow.appendChild(dot);
+        });
+        cell.appendChild(dotRow);
+      }
+    } else {
+      all.slice(0,3).forEach(ev => {
+        const cat = catOf(ev.color);
+        const pill = document.createElement('span'); pill.className = 'm-pill';
+        pill.style.cssText = `background:${cat.bg};color:${cat.c}`;
+        pill.textContent = ev.title;
+        pill.addEventListener('click', e => { e.stopPropagation(); showPop(ev); });
+        cell.appendChild(pill);
+      });
+      if (all.length > 3) { const more = document.createElement('div'); more.className = 'm-more'; more.textContent = `+${all.length-3} more`; cell.appendChild(more); }
+    }
     cell.addEventListener('click', e => { if (e.target.closest('.m-pill')) return; cursor = new Date(d); setView('day'); });
     gridEl.appendChild(cell);
   });
@@ -1275,7 +1427,13 @@ document.addEventListener('DOMContentLoaded', () => {
   load();
 
   window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1024) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbBack').style.display = 'none'; }
+    const w = window.innerWidth;
+    const sb = document.getElementById('sidebar');
+    if (w >= 768) {
+      sb.classList.remove('open');
+      document.getElementById('sbBack').style.display = 'none';
+      if (w < 1024) sb.classList.add('slim');
+    }
     render();
   });
 
